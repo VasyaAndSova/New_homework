@@ -1,5 +1,7 @@
 import os.path
 
+import pandas as pd
+
 from src.external_api import get_transaction_amount
 from src.generators import card_number_generator, filter_by_currency, transaction_descriptions
 from src.processing import get_dict_by_key_state, get_dict_date_dicrease
@@ -118,6 +120,11 @@ for _ in range(5):
 for card_number in card_number_generator(1, 5):
     print(card_number)
 
+tr_reader = pd.read_csv("data/transactions.csv", delimiter=";")
+print(tr_reader)
+
+df = pd.read_excel("data/transactions_excel.xlsx")
+print(df)
 
 current_dir = os.path.dirname(os.path.abspath(__file__))
 file_path = os.path.join(current_dir, "data", "operations.json")
