@@ -130,7 +130,6 @@ current_dir = os.path.dirname(os.path.abspath(__file__))
 file_path = os.path.join(current_dir, "data", "operations.json")
 transactions = get_data_financial_transactions(file_path)
 
-
 for transaction in transactions:
     rub_amount = get_transaction_amount(transaction)
     print(f"Transaction amount in RUB: {rub_amount}")
