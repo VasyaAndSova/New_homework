@@ -1,15 +1,24 @@
+import csv
 from typing import Any
 
-import pandas as pd
+import openpyxl
 
 
-def read_csv_file(file_path: Any) -> Any:
+def read_csv_file(tr_reader: Any) -> Any:
     """Функция реализовывает считывание финансовых операций из CSV-файла"""
-    tr_reader = pd.read_csv("data/transactions.csv", delimiter=";")
-    return tr_reader
+    with open("data/transactions.csv") as file:
+        reader = csv.DictReader(file, delimiter=";")
+        dict_csv = []
+        for row in reader:
+            dict_csv.append(row)
+    return dict_csv
 
 
-def read_xlsx_file(file_path: Any) -> Any:
+def read_xlsx_file(df: Any) -> Any:
     """Функция реализовывает считывание финансовых операций из XLSX-файла"""
-    df = pd.read_excel("data/transactions_excel.xlsx")
-    return df
+    workbook = openpyxl.load_workbook("data/transactions_excel.xlsx")
+    sheet = workbook.active
+    dict_xlsx = []
+    for row in sheet.iter_rows(values_only=True):
+        dict_xlsx.append(row)
+    return dict_xlsx
