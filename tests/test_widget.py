@@ -1,4 +1,3 @@
-
 import pytest
 
 from src.widget import format_date, format_requesite

@@ -37,7 +37,7 @@ def mask_card_number(number: str) -> str:
     mc_logger.info(f"Результат маскировки: {mask_number}")
 
     mc_logger.info("Начало форматирования номера на блоки")
-    format_number = " ".join([mask_number[i : i + 4] for i in range(0, 16, 4)])
+    format_number = " ".join([mask_number[i: i + 4] for i in range(0, 16, 4)])
     mc_logger.info(f"Результат форматирования: {format_number}")
 
     mc_logger.info("Завершение программы")

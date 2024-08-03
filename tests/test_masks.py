@@ -1,4 +1,3 @@
-
 import pytest
 
 from src.masks import mask_account_number, mask_card_number

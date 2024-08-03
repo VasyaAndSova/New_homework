@@ -1,5 +1,6 @@
 import pytest
 
+
 # Пустой список транзакций
 @pytest.fixture
 def transaction_empty():

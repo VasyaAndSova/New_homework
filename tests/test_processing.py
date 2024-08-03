@@ -1,4 +1,5 @@
-from src.processing import get_dict_by_key_state, get_dict_date_dicrease, filter_by_line_in_description, count_transactions_by_category
+from src.processing import (count_transactions_by_category, filter_by_line_in_description, get_dict_by_key_state,
+                            get_dict_date_dicrease)
 
 
 #  Тест функции фильтра, случай пустого списка
