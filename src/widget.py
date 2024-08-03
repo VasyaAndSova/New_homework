@@ -1,19 +1,26 @@
+import re
+from datetime import datetime
+
 from src.masks import get_mask_account, get_mask_card
 
 
-def get_mask_card_or_account(numbers: str) -> str:
-    """Функция принимает тип карты/счета и номер карты/счета и возращает их маску"""
-    if "Счет" in numbers:
-        mask_account = get_mask_account(numbers.split()[-1])
-        result = f"{numbers[:-20]}{mask_account}"
-        return result
-    else:
-        mask_card = get_mask_card(numbers.split()[-1])
-        result = f"{numbers[:-16]}{mask_card}"
-        return result
+def format_requesite(id_number: str) -> str:
+    """Функция принимает строку с типом и номером карты или счета и возвращает ее,
+    отформатированную и замаскированную, соответствено типу карты или счета"""
+    id = re.split(r"(?=\d)", id_number, 1)[0]
+    number = re.split(r"(?=\d)", id_number, 1)[1].replace(" ", "")
+
+    if id == "Счет ":
+        return id + get_mask_account(number)
+    elif id:
+        return id + get_mask_card(number)
+
+    raise ValueError("Не верный формат строки")
 
 
-def get_date_string(date: str) -> str:
-    """Функция принимает строку и возвращает строку с датой"""
-    date_string = date[:10].split("-")[::-1]
-    return ".".join(date_string)
+def format_date(date: str) -> str:
+    """Функция принимает строку с датой в формате: ГГГГ-ММ-ДД чч:мм:сс.мкс
+    и возвращает строку с датой в формате: ДД.ММ.ГГГГ"""
+    date_obj = datetime.strptime(date[:19], "%Y-%m-%dT%H:%M:%S")
+
+    return date_obj.strftime("%d.%m.%Y")
