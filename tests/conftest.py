@@ -1,18 +1,14 @@
 import pytest
 
-
+# Пустой список транзакций
 @pytest.fixture
-def numbers_card():
-    return "7000792289606361"
+def transaction_empty():
+    return []
 
 
+# Список всех транзакций
 @pytest.fixture
-def numbers_account():
-    return "73654108430135874305"
-
-
-@pytest.fixture
-def value_executed():
+def transaction_total():
     return [
         {"id": 41428829, "state": "EXECUTED", "date": "2019-07-03T18:35:29.512364"},
         {"id": 939719570, "state": "EXECUTED", "date": "2018-06-30T02:08:58.425572"},
@@ -21,36 +17,27 @@ def value_executed():
     ]
 
 
+# Список исполненых транзакций
 @pytest.fixture
-def value_canceled():
-    return [
-        {"id": 594226727, "state": "CANCELED", "date": "2018-09-12T21:27:25.241689"},
-        {"id": 615064591, "state": "CANCELED", "date": "2018-10-14T08:21:33.419441"},
-    ]
-
-
-@pytest.fixture
-def dict_date_dicrease():
+def transaction_executed():
     return [
         {"id": 41428829, "state": "EXECUTED", "date": "2019-07-03T18:35:29.512364"},
         {"id": 939719570, "state": "EXECUTED", "date": "2018-06-30T02:08:58.425572"},
-        {"id": 594226727, "state": "CANCELED", "date": "2018-09-12T21:27:25.241689"},
-        {"id": 615064591, "state": "CANCELED", "date": "2018-10-14T08:21:33.419441"},
     ]
 
 
+# Список отмененных транзакций
 @pytest.fixture
-def dict_date_increasing():
+def transaction_canceled():
     return [
-        {"id": 939719570, "state": "EXECUTED", "date": "2018-06-30T02:08:58.425572"},
         {"id": 594226727, "state": "CANCELED", "date": "2018-09-12T21:27:25.241689"},
         {"id": 615064591, "state": "CANCELED", "date": "2018-10-14T08:21:33.419441"},
-        {"id": 41428829, "state": "EXECUTED", "date": "2019-07-03T18:35:29.512364"},
     ]
 
 
+# Список транзакций для генераторов
 @pytest.fixture
-def transactions():
+def transaction():
     return [
         {
             "id": 939719570,
@@ -98,13 +85,3 @@ def transactions():
             "to": "Счет 14211924144426031657",
         },
     ]
-
-
-@pytest.fixture
-def start():
-    return 1
-
-
-@pytest.fixture
-def stop():
-    return 5

@@ -1,7 +1,7 @@
 import re
 from datetime import datetime
 
-from src.masks import get_mask_account, get_mask_card
+from src.masks import mask_account_number, mask_card_number
 
 
 def format_requesite(id_number: str) -> str:
@@ -11,9 +11,9 @@ def format_requesite(id_number: str) -> str:
     number = re.split(r"(?=\d)", id_number, 1)[1].replace(" ", "")
 
     if id == "Счет ":
-        return id + get_mask_account(number)
+        return id + mask_account_number(number)
     elif id:
-        return id + get_mask_card(number)
+        return id + mask_card_number(number)
 
     raise ValueError("Не верный формат строки")
 

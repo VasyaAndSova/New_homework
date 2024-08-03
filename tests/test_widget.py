@@ -1,32 +1,47 @@
+
 import pytest
 
-from src.widget import get_date_string, get_mask_card_or_account
+from src.widget import format_date, format_requesite
+from tests.mask_test_data import format_requesite_test_data
 
 
-@pytest.mark.parametrize(
-    "numbers, result",
-    [
-        ("Maestro 1596837868705199", "Maestro 1596 83** **** 5199"),
-        ("Счет 64686473678894779589", "Счет **9589"),
-        ("MasterCard 7158300734726758", "MasterCard 7158 30** **** 6758"),
-        ("Счет 35383033474447895560", "Счет **5560"),
-        ("Visa Classic 6831982476737658", "Visa Classic 6831 98** **** 7658"),
-        ("Visa Platinum 8990922113665229", "Visa Platinum 8990 92** **** 5229"),
-        ("Visa Gold 5999414228426353", "Visa Gold 5999 41** **** 6353"),
-        ("Счет 73654108430135874305", "Счет **4305"),
-    ],
-)
-def test_get_mask_card_or_account(numbers, result):
-    assert get_mask_card_or_account(numbers) == result
+# Тест функции форматирования реквезитов
+@pytest.mark.parametrize("id_number, result", format_requesite_test_data)
+def test_format_requesite(id_number, result):
+    # Если ожидается неверный тип входных данных
+    if result == "TypeError":
+        with pytest.raises(TypeError) as e:
+            format_requesite(id_number)
+        assert str(e.typename) == result
+    # Если нет номера (неверный формат стоки)
+    elif result == "IndexError":
+        with pytest.raises(IndexError) as e:
+            format_requesite(id_number)
+        assert str(e.typename) == result
+    # Если ожидается неверный формат входых данных
+    elif result == "ValueError":
+        with pytest.raises(ValueError) as e:
+            format_requesite(id_number)
+        assert str(e.typename) == result
+    # Если ожидаются корректные входные данные
+    else:
+        assert format_requesite(id_number) == result
 
 
-@pytest.mark.parametrize(
-    "date, date_string",
-    [
-        ("2018-07-11T02:26:18.671407", "11.07.2018"),
-        ("2010-12-25T02:26:18.671407", "25.12.2010"),
-        ("2024-01-05T02:26:18.671407", "05.01.2024"),
-    ],
-)
-def test_get_date_string(date, date_string):
-    assert get_date_string(date) == date_string
+# Тест функции форматирования даты (неверный формат)
+def test_format_gate_raise_value():
+    with pytest.raises(ValueError) as e:
+        format_date("неверны формат")
+    assert str(e.typename) == "ValueError"
+
+
+# Тест функции форматирования даты (неверный тип)
+def test_format_gate_raise_type():
+    with pytest.raises(TypeError) as e:
+        format_date(12345)
+    assert str(e.typename) == "TypeError"
+
+
+# Тест функции форматирования даты (ожидаемый реззультат)
+def test_format_gate():
+    assert format_date("2018-07-11T02:26:18.671407") == "11.07.2018"
