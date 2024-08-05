@@ -1,27 +1,49 @@
+import pytest
+
 from src.generators import card_number_generator, filter_by_currency, transaction_descriptions
 
 
-def test_filter_by_currency(transactions):
-    filter_currency = filter_by_currency(transactions, "USD")
-    assert next(filter_currency) == {
-        "id": 939719570,
-        "state": "EXECUTED",
-        "date": "2018-06-30T02:08:58.425572",
-        "operationAmount": {"amount": "9824.07", "currency": {"name": "USD", "code": "USD"}},
-        "description": "Перевод организации",
-        "from": "Счет 75106830613657916952",
-        "to": "Счет 11776614605963066702",
-    }
+# Тест фильтра по валюте
+def test_filter_by_currency(transaction):
+    transaction_filter = filter_by_currency(transaction, "USD")
+    assert next(transaction_filter)["id"] == 939719570
+    assert next(transaction_filter)["id"] == 142264268
+    assert next(transaction_filter)["id"] == 895315941
 
 
-def test_transaction_descriptions(transactions):
-    descriptions = transaction_descriptions(transactions)
-    assert next(descriptions) == "Перевод организации"
-    assert next(descriptions) == "Перевод со счета на счет"
-    assert next(descriptions) == "Перевод со счета на счет"
-    assert next(descriptions) == "Перевод с карты на карту"
+# Тест фильтра по валюте (пустой список)
+def test_filter_by_currency_empty(transaction_empty):
+    with pytest.raises(StopIteration) as e:
+        transaction_filter = filter_by_currency(transaction_empty, "USD")
+        next(transaction_filter)
+    assert str(e.typename) == "StopIteration"
 
 
-def test_card_number_generator(start, stop):
-    number_generator = card_number_generator(start, stop)
-    assert next(number_generator) == "0000 0000 0000 0001"
+# Тест генератора описаний
+def test_transaction_descriptions(transaction):
+    description = transaction_descriptions(transaction)
+    assert next(description) == "Перевод организации"
+    assert next(description) == "Перевод со счета на счет"
+    assert next(description) == "Перевод со счета на счет"
+
+
+# Тест генератора описаний (пустой список)
+def test_transaction_descriptions_empty(transaction_empty):
+    with pytest.raises(StopIteration) as e:
+        description = transaction_descriptions(transaction_empty)
+        next(description)
+    assert str(e.typename) == "StopIteration"
+
+
+# Тест генератора номеров карт
+def test_card_number_generator():
+    card_number = card_number_generator(8888, 8900)
+    assert next(card_number) == "0000 0000 0000 8888"
+
+
+# Тест генератора номеров карт (неверный диапазон)
+def test_card_number_generator_raises():
+    with pytest.raises(StopIteration) as e:
+        card_number = card_number_generator(5, 0)
+        next(card_number)
+    assert str(e.typename) == "StopIteration"
